@@ -19,47 +19,51 @@ class GildedRose {
 
     public void updateQuality() {
         Arrays.stream(items).forEach(item -> {
-            if (item.name.equals("Sulfuras, Hand of Ragnaros")) {
+            ItemEnum itemEnum = ItemEnum.fromString(item.name);
+
+            if (itemEnum.isLegendary()) {
                 return;
             }
 
             item.sellIn--;
 
-            if (item.name.equals("Aged Brie")) {
+            if (itemEnum == ItemEnum.AGED_BRIE) {
                 if (item.sellIn < 0) {
-                    item.quality = Math.min(50, item.quality + 2);
+                    if (item.quality < itemEnum.getMaxQuality() - 1) {
+                        item.quality += 2;
+                    } else {
+                        item.quality = itemEnum.getMaxQuality();
+                    }
                 } else {
-                    item.quality = Math.min(50, item.quality + 1);
+                    if (item.quality < itemEnum.getMaxQuality()) {
+                        item.quality++;
+                    }
                 }
-            }
-            else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+            } else if (itemEnum == ItemEnum.BACKSTAGE) {
                 if (item.sellIn < 0) {
                     item.quality = 0;
                 } else {
-                    if (item.quality < 50) {
+                    if (item.quality < itemEnum.getMaxQuality()) {
                         item.quality++;
                     }
-
-                    if (item.sellIn < 11 && item.quality < 50) {
+                    if (item.sellIn < 11 && item.quality < itemEnum.getMaxQuality()) {
                         item.quality++;
                     }
-
-                    if (item.sellIn < 6 && item.quality < 50) {
+                    if (item.sellIn < 6 && item.quality < itemEnum.getMaxQuality()) {
                         item.quality++;
                     }
                 }
-            }
-            else {
-                if (item.quality > 0) {
+            } else {
+                if (item.quality > itemEnum.getMinQuality()) {
                     item.quality--;
                 }
-
-                if (item.sellIn < 0 && item.quality > 0) {
+                if (item.sellIn < 0 && item.quality > itemEnum.getMinQuality()) {
                     item.quality--;
                 }
             }
 
-            item.quality = Math.max(0, Math.min(50, item.quality));
+            item.quality = Math.max(itemEnum.getMinQuality(), Math.min(itemEnum.getMaxQuality(), item.quality));
         });
     }
+
 }
