@@ -29,36 +29,33 @@ class GildedRose {
 
             if (itemEnum == ItemEnum.AGED_BRIE) {
                 if (item.sellIn < 0) {
-                    if (item.quality < itemEnum.getMaxQuality() - 1) {
-                        item.quality += 2;
-                    } else {
-                        item.quality = itemEnum.getMaxQuality();
-                    }
+                    update(item, 2, 0, itemEnum.getMaxQuality());
                 } else {
-                    if (item.quality < itemEnum.getMaxQuality()) {
-                        item.quality++;
-                    }
+                    update(item, 1, 0, itemEnum.getMaxQuality());
                 }
-            } else if (itemEnum == ItemEnum.BACKSTAGE) {
+            }
+            else if (itemEnum == ItemEnum.BACKSTAGE) {
                 if (item.sellIn < 0) {
                     item.quality = 0;
                 } else {
-                    if (item.quality < itemEnum.getMaxQuality()) {
-                        item.quality++;
+                    update(item, 1, 0, itemEnum.getMaxQuality());
+
+                    if (item.sellIn < 11) {
+                        update(item, 1, 0, itemEnum.getMaxQuality());
                     }
-                    if (item.sellIn < 11 && item.quality < itemEnum.getMaxQuality()) {
-                        item.quality++;
-                    }
-                    if (item.sellIn < 6 && item.quality < itemEnum.getMaxQuality()) {
-                        item.quality++;
+
+                    if (item.sellIn < 6) {
+                        update(item, 1, 0, itemEnum.getMaxQuality());
                     }
                 }
-            } else {
+            }
+            else {
                 if (item.quality > itemEnum.getMinQuality()) {
-                    item.quality--;
+                    update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
                 }
+
                 if (item.sellIn < 0 && item.quality > itemEnum.getMinQuality()) {
-                    item.quality--;
+                    update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
                 }
             }
 
@@ -66,4 +63,14 @@ class GildedRose {
         });
     }
 
+
+    private void update(Item item, int value, int minQuality, int maxQuality) {
+        if (item.quality + value < minQuality) {
+            item.quality = minQuality;
+        } else if (item.quality + value > maxQuality) {
+            item.quality = maxQuality ;
+        } else if (item.quality > minQuality && item.quality < maxQuality) {
+            item.quality = item.quality + value;
+        }
+    }
 }
