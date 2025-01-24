@@ -147,4 +147,87 @@ class GildedRoseTest {
         assertEquals(-1, item.sellIn);
         assertEquals(75, item.quality);
     }
+
+    /**
+     * "Backstage passes" items
+     * - The `sellIn` value decreases by 1 at the end of the day.
+     * - The `quality` increases by 1 when there are more than 10 days left.
+     */
+    @Test
+    public void backstagePassesQualityIncreaseWhenMoreThan10Days() {
+        Item[] items = new Item[] { new Item(BACKSTAGE, 20, 10)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(19, item.sellIn);
+        assertEquals(11, item.quality);
+    }
+
+    /**
+     * "Backstage passes" items
+     * - The `quality` increases by 2 when there are 10 days or less.
+     */
+    @Test
+    public void backstagePassesQualityIncreaseWhen10DaysOrLess() {
+        Item[] items = new Item[] { new Item(BACKSTAGE, 10, 20)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(9, item.sellIn);
+        assertEquals(22, item.quality);
+    }
+
+    /**
+     * "Backstage passes" items
+     * - The `quality` increases by 3 when there are 5 days or less.
+     */
+    @Test
+    public void backstagePassesQualityIncreaseWhen5DaysOrLess() {
+        Item[] items = new Item[] { new Item(BACKSTAGE, 5, 20)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(4, item.sellIn);
+        assertEquals(23, item.quality);
+    }
+
+    /**
+     * "Backstage passes" items
+     * - The `quality` drops to 0 after the concert (when sellIn is 0 or less).
+     */
+    @Test
+    public void backstagePassesQualityDropsToZeroAfterConcert() {
+        Item[] items = new Item[] { new Item(BACKSTAGE, 0, 20)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(-1, item.sellIn);
+        assertEquals(0, item.quality);
+    }
+
+    /**
+     * "Backstage passes" items
+     * - The `quality` never exceeds 50.
+     */
+    @Test
+    public void backstagePassesQualityNeverExceeds50() {
+        Item[] items = new Item[] { new Item(BACKSTAGE, 3, 49)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(2, item.sellIn);
+        assertEquals(50, item.quality);
+    }
 }
+
+
