@@ -118,18 +118,18 @@ class GildedRoseTest {
 
     /**
      * "Sulfuras" items
-     * - The `quality` value remains at 75.
+     * - The `quality` value remains at 80.
      */
     @Test
     public void sulfurasQualityIsAlwaysSame() {
-        Item[] items = new Item[] { new Item(SULFURAS, 10, 75)};
+        Item[] items = new Item[] { new Item(SULFURAS, 10, 80)};
         GildedRose app = new GildedRose(items);
 
         app.updateQuality();
 
         Item item = app.getItems()[0];
         assertEquals(10, item.sellIn);
-        assertEquals(75, item.quality);
+        assertEquals(80, item.quality);
     }
 
     /**
@@ -138,14 +138,14 @@ class GildedRoseTest {
      */
     @Test
     public void sulfurasUnchangedAfterSellInPassed() {
-        Item[] items = new Item[] {new Item(SULFURAS, -1, 75)};
+        Item[] items = new Item[] {new Item(SULFURAS, -1, 80)};
         GildedRose app = new GildedRose(items);
 
         app.updateQuality();
 
         Item item = app.getItems()[0];
         assertEquals(-1, item.sellIn);
-        assertEquals(75, item.quality);
+        assertEquals(80, item.quality);
     }
 
     /**
