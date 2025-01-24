@@ -228,6 +228,36 @@ class GildedRoseTest {
         assertEquals(2, item.sellIn);
         assertEquals(50, item.quality);
     }
+
+    /**
+     * "Conjured" items
+     * - quality decrease by 2
+     * - sellIn decrease by 1
+     */
+    @Test
+    void conjuredQualityAndSellInDecrease() {
+        Item[] items = new Item[] { new Item(CONJURED, 5, 10) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        Item item = app.getItems()[0];
+        assertEquals(4, item.sellIn);
+        assertEquals(8, item.quality);
+    }
+
+    /**
+     * "Conjured" items
+     * - quality decrease by 4
+     * - sellIn decrease by 1
+     */
+    @Test
+    void conjuredQualityAndSellInWithPassedExpiration() {
+        Item[] items = new Item[] { new Item(CONJURED, -1, 10) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        Item item = app.getItems()[0];
+        assertEquals(-2, item.sellIn);
+        assertEquals(6, item.quality);
+    }
 }
 
 
