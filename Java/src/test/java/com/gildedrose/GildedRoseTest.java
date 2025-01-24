@@ -2,8 +2,7 @@ package com.gildedrose;
 
 import org.junit.jupiter.api.Test;
 
-import static com.gildedrose.utils.TestUtils.FOO_ITEM;
-import static com.gildedrose.utils.TestUtils.NORMAL_ITEM;
+import static com.gildedrose.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GildedRoseTest {
@@ -68,4 +67,52 @@ class GildedRoseTest {
         assertEquals(0, item.quality);
     }
 
+    /**
+     * "Aged Brie" items
+     * - The `sellIn` value decreases by 1 at the end of the day.
+     * - The `quality` value increases by 1 at the end of the day.
+     */
+    @Test
+    public void agedBrieQualityIncreasesBeforeSellIn() {
+        Item[] items = new Item[] { new Item(AGED_BRIE, 10, 30)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(9, item.sellIn);
+        assertEquals(31, item.quality);
+    }
+
+    /**
+     * "Aged Brie" items
+     * - The `quality` value increases by 2 when the `sellIn` value is 0 or less.
+     */
+    @Test
+    public void agedBrieQualityIncreasesFasterAfterSellIn() {
+        Item[] items = new Item[] { new Item(AGED_BRIE, 0, 30)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(-1, item.sellIn);
+        assertEquals(32, item.quality);
+    }
+
+    /**
+     * "Aged Brie" items
+     * - The `quality` value never exceeds 50, even as it improves over time.
+     */
+    @Test
+    public void agedBrieQualityNeverExceeds50() {
+        Item[] items = new Item[] { new Item(AGED_BRIE, 5, 50)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(4, item.sellIn);
+        assertEquals(50, item.quality);
+    }
 }
