@@ -27,49 +27,72 @@ class GildedRose {
 
             item.sellIn--;
 
-            if (itemEnum == ItemEnum.AGED_BRIE) {
-                if (item.sellIn < 0) {
-                    update(item, 2, 0, itemEnum.getMaxQuality());
-                } else {
-                    update(item, 1, 0, itemEnum.getMaxQuality());
-                }
-            }
-            else if (itemEnum == ItemEnum.BACKSTAGE) {
-                if (item.sellIn < 0) {
-                    item.quality = 0;
-                } else {
-                    update(item, 1, 0, itemEnum.getMaxQuality());
+            switch (itemEnum) {
+                case AGED_BRIE:
+                    updateAgedBrie(item);
+                    break;
 
-                    if (item.sellIn < 11) {
-                        update(item, 1, 0, itemEnum.getMaxQuality());
-                    }
+                case BACKSTAGE:
+                    updateBackstage(item);
+                    break;
 
-                    if (item.sellIn < 6) {
-                        update(item, 1, 0, itemEnum.getMaxQuality());
-                    }
-                }
-            }
-            else if (itemEnum == ItemEnum.CONJURED) {
-                if (item.sellIn < 0) {
-                    update(item, -4, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
-                } else {
-                    update(item, -2, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
-                }
-            }
-            else {
-                if (item.quality > itemEnum.getMinQuality()) {
-                    update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
-                }
+                case CONJURED:
+                    updateConjured(item);
+                    break;
 
-                if (item.sellIn < 0 && item.quality > itemEnum.getMinQuality()) {
-                    update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
-                }
+                default:
+                    updateNormal(item, itemEnum);
+                    break;
             }
 
             item.quality = Math.max(itemEnum.getMinQuality(), Math.min(itemEnum.getMaxQuality(), item.quality));
         });
     }
 
+    private void updateAgedBrie(Item item) {
+        ItemEnum itemEnum = ItemEnum.fromString(item.name);
+        if (item.sellIn < 0) {
+            update(item, 2, 0, itemEnum.getMaxQuality());
+        } else {
+            update(item, 1, 0, itemEnum.getMaxQuality());
+        }
+    }
+
+    private void updateBackstage(Item item) {
+        ItemEnum itemEnum = ItemEnum.fromString(item.name);
+        if (item.sellIn < 0) {
+            item.quality = 0;
+        } else {
+            update(item, 1, 0, itemEnum.getMaxQuality());
+
+            if (item.sellIn < 11) {
+                update(item, 1, 0, itemEnum.getMaxQuality());
+            }
+
+            if (item.sellIn < 6) {
+                update(item, 1, 0, itemEnum.getMaxQuality());
+            }
+        }
+    }
+
+    private void updateConjured(Item item) {
+        ItemEnum itemEnum = ItemEnum.fromString(item.name);
+        if (item.sellIn < 0) {
+            update(item, -4, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
+        } else {
+            update(item, -2, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
+        }
+    }
+
+    private void updateNormal(Item item, ItemEnum itemEnum) {
+        if (item.quality > itemEnum.getMinQuality()) {
+            update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
+        }
+
+        if (item.sellIn < 0 && item.quality > itemEnum.getMinQuality()) {
+            update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
+        }
+    }
 
     private void update(Item item, int value, int minQuality, int maxQuality) {
         if (item.quality + value < minQuality) {
