@@ -32,7 +32,13 @@ public enum ItemEnum {
      * Represents the "Backstage passes to a TAFKAL80ETC concert" item with quality values ranging from 0 to 50
      * and a value of 1. Not a legendary item.
      */
-    BACKSTAGE("Backstage passes to a TAFKAL80ETC concert", 0, 50, 1, false);
+    BACKSTAGE("Backstage passes to a TAFKAL80ETC concert", 0, 50, 1, false),
+
+    /**
+     * Represents the "Conjured" item with quality values ranging from 0 to 50
+     * and a value of 1. Not a legendary item.
+     */
+    CONJURED("Conjured", 0, 50, -2, false);
 
 
     private final String name;

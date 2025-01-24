@@ -49,6 +49,13 @@ class GildedRose {
                     }
                 }
             }
+            else if (itemEnum == ItemEnum.CONJURED) {
+                if (item.sellIn < 0) {
+                    update(item, -4, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
+                } else {
+                    update(item, -2, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
+                }
+            }
             else {
                 if (item.quality > itemEnum.getMinQuality()) {
                     update(item, -1, itemEnum.getMinQuality(), itemEnum.getMaxQuality());
