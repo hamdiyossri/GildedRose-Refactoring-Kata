@@ -115,4 +115,36 @@ class GildedRoseTest {
         assertEquals(4, item.sellIn);
         assertEquals(50, item.quality);
     }
+
+    /**
+     * "Sulfuras" items
+     * - The `quality` value remains at 75.
+     */
+    @Test
+    public void sulfurasQualityIsAlwaysSame() {
+        Item[] items = new Item[] { new Item(SULFURAS, 10, 75)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(10, item.sellIn);
+        assertEquals(75, item.quality);
+    }
+
+    /**
+     * "Sulfuras" items
+     * - The `sellIn` and `quality` values remain unchanged even if the sell-in date has passed.
+     */
+    @Test
+    public void sulfurasUnchangedAfterSellInPassed() {
+        Item[] items = new Item[] {new Item(SULFURAS, -1, 75)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        Item item = app.items[0];
+        assertEquals(-1, item.sellIn);
+        assertEquals(75, item.quality);
+    }
 }
